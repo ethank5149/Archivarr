@@ -1,2 +1,2 @@
 # Archivarr
- An automated and user-buildable personal media library manager and streaming application stack
+ An automated and self-building personal media library manager and streaming application stack
