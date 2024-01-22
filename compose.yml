@@ -1,0 +1,267 @@
+---
+#####################################
+# Docker Compose File For Archivarr #
+#                                   #
+#                                   #
+#####################################
+version: "3.7"
+
+services:
+  deluge:  # Torrent Download Client
+    container_name: Deluge
+    image: lscr.io/linuxserver/deluge:latest
+    env_file:
+      - .env
+    volumes:
+      - deluge:/config
+      - ./downloads/incomplete:/incomplete
+      - ./downloads/complete:/complete
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+
+  emulatorjs:  # Retro Games Emulator
+    container_name: Emulatorjs
+    image: lscr.io/linuxserver/emulatorjs:latest
+    env_file:
+      - .env
+    ports:
+      - ${EMULATORJS_CONFIG_PORT:-3000}:3000
+      - ${EMULATORJS_UI_PORT:-8080}:80
+      - ${EMULATORJS_IPFS_PORT:-4001}:4001
+    volumes:
+      - emulatorjs:/config
+      - ./media/roms:/data
+    network_mode: bridge
+    restart: unless-stopped
+
+  flaresolverr:  # Cloudflare Bypass
+    container_name: Flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    env_file:
+      - .env
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+
+  gluetun:  # VPN Proxy
+    container_name: Gluetun
+    image: qmcgaw/gluetun:latest
+    env_file:
+      - .env
+    ports:
+      - ${GLUETUN_HTTP_PORT:-8888}:8888/tcp         # HTTP proxy
+      - ${GLUETUN_SHADOWSOCKS_PORT:-8388}:8388/tcp  # Shadowsocks
+      - ${GLUETUN_SHADOWSOCKS_PORT:-8388}:8388/udp  # Shadowsocks
+      - ${DELUGE_UI_PORT:-8112}:8112                # Deluge UI
+      - ${DELUGE_PORT:-6881}:6881/tcp               # Deluge TCP
+      - ${DELUGE_PORT:-6881}:6881/udp               # Deluge UDP
+      - ${PROWLARR_PORT:-9696}:9696                 # Prowlarr UI
+      - ${FLARESOLVERR_PORT:-8191}:8191             # Flaresolverr
+    volumes:
+      - gluetun:/gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    network_mode: bridge
+    restart: always
+
+  homarr:  # Simple Yet Customizable Dashboard
+    container_name: Homarr
+    image: ghcr.io/ajnart/homarr:latest
+    env_file:
+      - .env
+    ports:
+      - ${HOMARR_PORT:-7575}:7575
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - homarr:/app/data/configs
+    network_mode: bridge
+    restart: unless-stopped
+
+  lidarr:  # Music Library Manager
+    container_name: Lidarr
+    image: lscr.io/linuxserver/lidarr:latest
+    env_file:
+      - .env
+    ports:
+      - ${LIDARR_PORT:-8686}:8686
+    volumes:
+      - lidarr:/config
+      - "./downloads/complete:/downloads"
+      - "./media/music:/data/music"
+    restart: unless-stopped
+    network_mode: bridge
+
+  overseerr:  # Request management and media discovery tool
+    container_name: Overseerr
+    image: lscr.io/linuxserver/overseerr:latest
+    env_file:
+      - .env
+    ports:
+      - ${OVERSEERR_PORT:-5055}:5055
+    volumes:
+      - overseerr:/config
+    restart: unless-stopped
+    network_mode: bridge
+
+  plex:  # Personal media library streaming
+    container_name: Plex
+    image: lscr.io/linuxserver/plex:latest
+    env_file:
+      - .env
+    volumes:
+      - plex:/config
+      - ./media/tv:/tv
+      - ./media/movies:/movies
+      - ./media/music:/music
+    devices:
+      - /dev/dri:/dev/dri
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: all
+    #         capabilities: [gpu]
+    network_mode: host
+    restart: unless-stopped
+
+  portainer:  # Docker Management Dashboard
+    container_name: Portainer
+    image: portainer/portainer-ce:alpine
+    env_file:
+      - .env
+    ports:
+      - ${PORTAINER_PORT:-9000}:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    command: -H unix:///var/run/docker.sock
+    network_mode: bridge
+    restart: always
+
+  prowlarr:  # Torrent Indexer & Manager
+    container_name: Prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    env_file:
+      - .env
+    volumes:
+      - prowlarr:/config
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+
+  radarr:  # Movie Library Manager
+    container_name: Radarr
+    image: lscr.io/linuxserver/radarr:latest
+    env_file:
+      - .env
+    ports:
+      - ${RADARR_PORT:-7878}:7878
+    volumes:
+      - radarr:/config
+      - ./downloads/complete:/downloads
+      - ./media/movies:/data
+    restart: unless-stopped
+    network_mode: bridge
+
+  readarr:  # E-Book Library Manager
+    container_name: Readarr
+    image: lscr.io/linuxserver/readarr:nightly
+    env_file:
+      - .env
+    ports:
+      - ${READARR_PORT:-8787}:8787
+    volumes:
+      - readarr:/config
+      - ./downloads/complete:/downloads
+      - ./media/books:/data
+    restart: unless-stopped
+    network_mode: bridge
+
+  sonarr:  # TV Series Library Manager
+    container_name: Sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    env_file:
+      - .env
+    ports:
+      - ${SONARR_PORT:-8989}:8989
+    volumes:
+      - sonarr:/config
+      - ./downloads/complete:/downloads
+      - ./media/tv:/data
+    restart: unless-stopped
+    network_mode: bridge
+
+  tautulli:  # Plex Statistics
+    container_name: Tautulli
+    image: lscr.io/linuxserver/tautulli:latest
+    env_file:
+      - .env
+    ports:
+      - ${TAUTULLI_PORT:-8181}:8181
+    volumes:
+      - tautulli:/config
+    network_mode: bridge
+    restart: unless-stopped
+
+  tdarr:  # Distributed Transcoding Manager
+    container_name: Tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    env_file:
+      - .env
+    ports:
+      - ${TDARR_UI_PORT:-8265}:8265
+      - ${TDARR_SERVER_PORT:-8266}:8266
+    volumes:
+      - tdarr-server:/app/server
+      - tdarr-configs:/app/configs
+      - tdarr-logs:/app/logs
+      - ./media/tv:/media/tv
+      - ./media/movies:/media/movies
+    devices:
+      - /dev/dri:/dev/dri
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: all
+    #         capabilities: [gpu]
+    restart: unless-stopped
+    network_mode: bridge
+
+
+volumes:
+  deluge:
+  emulatorjs:
+  flaresolverr:
+  gluetun:
+  homarr:
+  jellyfin:
+  jellyseerr:
+  lidarr:
+  maintainerr:
+  overseerr:
+  plex:
+  portainer:
+  prowlarr:
+  radarr:
+  readarr:
+  sonarr:
+  tautulli:
+  tdarr-server:
+  tdarr-configs:
+  tdarr-logs:
+
+
+secrets:
+  username:
+    file: ./secrets/username.txt
+  password:
+    file: ./secrets/password.txt
+  wireguard-addresses:
+    file: ./secrets/wireguard-addresses.txt
+  wireguard-private-key:
+    file: ./secrets/wireguard-private-key.txt
+  discord-key:
+    file: ./secrets/discord-key.txt
