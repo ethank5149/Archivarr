@@ -1,0 +1,98 @@
+---
+#####################################
+# Docker Compose File For Archivarr #
+#                                   #
+#                                   #
+#####################################
+version: "3.7"
+
+services:
+  deluge:
+    volumes:
+      - downloads:/downloads
+
+  emulatorjs:
+    volumes:
+      - roms:/data
+
+  lidarr:
+    volumes:
+      - downloads:/downloads
+      - music:/data/music
+
+  plex:
+    volumes:
+      - tv:/tv
+      - movies:/movies
+      - music:/music
+
+  radarr:
+    volumes:
+      - downloads:/downloads
+      - movies:/movies
+
+  readarr:
+    volumes:
+      - downloads:/downloads
+      - books:/books
+
+  sonarr:
+    volumes:
+      - downloads:/downloads
+      - tv:/tv
+
+  tdarr:
+    volumes:
+      - tv:/media/tv
+      - movies:/media/movies
+
+
+volumes:
+  archive:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp
+      o: bind
+
+  books:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/Books
+      o: bind
+
+  downloads:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/downloads
+      o: bind
+
+  movies:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/movies
+      o: bind
+
+  music:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/music
+      o: bind
+
+  roms:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/roms
+      o: bind
+
+  tv:
+    driver: local
+    driver_opts:
+      type: none
+      device: /media/ethank5149/BackItUp/tv
+      o: bind
