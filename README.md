@@ -15,4 +15,4 @@
 7. Set up [Prowlarr](http://localhost:9696) as follows:
     - Under `Settings` $\rightarrow$ `Indexers` (Indexer Proxies), add Flaresolverr using host `http://172.17.0.1:8191/`
     - Under `Settings` $\rightarrow$ `Download Clients`, add Deluge using host `http://172.17.0.1:8112/` and password created previously.
-    - Under `Settings` $\rightarrow$ `Apps`, add each desired application by first replacing the `localhost` with `172.17.0.1` for both entries (For example, `http://localhost:9696` becomes `http://172.17.0.1:9696/`) and inserting the applications API key found on each apps `Settings` $\rightarrow$ `General` page.
+    - Under `Settings` $\rightarrow$ `Apps`, add each desired application by first replacing the `localhost` with `172.17.0.1` for both entries (For example, `http://localhost:9696` becomes `http://172.17.0.1:9696/`) and inserting the applications API key found on each apps' `Settings` $\rightarrow$ `General` page.
