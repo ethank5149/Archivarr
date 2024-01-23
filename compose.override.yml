@@ -6,45 +6,47 @@
 #####################################
 version: "3.7"
 
+
 services:
-  deluge:
-    volumes:
-      - downloads:/downloads
+  # deluge:
+  #   volumes:
+  #     - downloads:/downloads
 
   emulatorjs:
     volumes:
-      - roms:/data
+      - "G:/roms://data"
 
   lidarr:
     volumes:
-      - downloads:/downloads
-      - music:/data/music
+      - "G:/music://data/music"
 
-  plex:
-    volumes:
-      - tv:/tv
-      - movies:/movies
-      - music:/music
+  # plex:
+  #   volumes:
+  #     - "I:/://media/tv"
+  #     - "E:/://media/movies"
+  #     - "F:/://media/archive"
+  #     - "G:/music://music/music"
 
   radarr:
     volumes:
-      - downloads:/downloads
-      - movies:/movies
+      - "E:/://data/media/movies"
+      - "F:/movies://data/media/archive"
 
   readarr:
     volumes:
-      - downloads:/downloads
-      - books:/books
+      - "F:/books://data/books"
 
   sonarr:
     volumes:
-      - downloads:/downloads
-      - tv:/tv
+      - "I:/://data/media/tv"
+      - "F:/tv://data/media/archive"
 
   tdarr:
     volumes:
-      - tv:/media/tv
-      - movies:/media/movies
+      - "C:/Users/ethan/transcode_cache/://temp"
+      - "I:/://media/tv"
+      - "E:/://media/movies"
+      - "F:/://media/archive"
 
 
 volumes:
@@ -52,47 +54,40 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp
+      device: "F:/"
       o: bind
 
   books:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp/Books
-      o: bind
-
-  downloads:
-    driver: local
-    driver_opts:
-      type: none
-      device: /media/ethank5149/BackItUp/downloads
+      device: "F:/books"
       o: bind
 
   movies:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp/movies
+      device: "E:/"
       o: bind
 
   music:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp/music
+      device: "G:/music"
       o: bind
 
   roms:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp/roms
+      device: "G:/roms"
       o: bind
 
   tv:
     driver: local
     driver_opts:
       type: none
-      device: /media/ethank5149/BackItUp/tv
+      device: "I:/"
       o: bind

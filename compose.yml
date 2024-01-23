@@ -6,6 +6,7 @@
 #####################################
 version: "3.7"
 
+
 services:
   deluge:  # Torrent Download Client
     container_name: Deluge
@@ -104,27 +105,27 @@ services:
     restart: unless-stopped
     network_mode: bridge
 
-  plex:  # Personal media library streaming
-    container_name: Plex
-    image: lscr.io/linuxserver/plex:latest
-    env_file:
-      - .env
-    volumes:
-      - plex:/config
-      - ./media/tv:/tv
-      - ./media/movies:/movies
-      - ./media/music:/music
-    devices:
-      - /dev/dri:/dev/dri
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #       - driver: nvidia
-    #         count: all
-    #         capabilities: [gpu]
-    network_mode: host
-    restart: unless-stopped
+  # plex:  # Personal media library streaming
+  #   container_name: Plex
+  #   image: lscr.io/linuxserver/plex:latest
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - plex:/config
+  #     - ./media/tv:/tv
+  #     - ./media/movies:/movies
+  #     - ./media/music:/music
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   # deploy:
+  #   #   resources:
+  #   #     reservations:
+  #   #       devices:
+  #   #       - driver: nvidia
+  #   #         count: all
+  #   #         capabilities: [gpu]
+  #   network_mode: host
+  #   restart: unless-stopped
 
   portainer:  # Docker Management Dashboard
     container_name: Portainer
