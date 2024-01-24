@@ -90,7 +90,7 @@ services:
     volumes:
       - lidarr:/config
       - "./downloads/complete:/downloads"
-      - "./media/music:/data/music"
+      - "./media/music:/data/local-music"
     restart: unless-stopped
     network_mode: bridge
 
@@ -162,7 +162,7 @@ services:
     volumes:
       - radarr:/config
       - ./downloads/complete:/downloads
-      - ./media/movies:/data
+      - ./media/movies:/data/local-movies
     restart: unless-stopped
     network_mode: bridge
 
@@ -176,7 +176,7 @@ services:
     volumes:
       - readarr:/config
       - ./downloads/complete:/downloads
-      - ./media/books:/data
+      - ./media/books:/data/local-books
     restart: unless-stopped
     network_mode: bridge
 
@@ -190,7 +190,7 @@ services:
     volumes:
       - sonarr:/config
       - ./downloads/complete:/downloads
-      - ./media/tv:/data
+      - ./media/tv:/data/local-tv
     restart: unless-stopped
     network_mode: bridge
 
@@ -218,8 +218,8 @@ services:
       - tdarr-server:/app/server
       - tdarr-configs:/app/configs
       - tdarr-logs:/app/logs
-      - ./media/tv:/media/tv
-      - ./media/movies:/media/movies
+      - ./media/tv:/data/tv
+      - ./media/movies:/data/movies
     devices:
       - /dev/dri:/dev/dri
     # deploy:
