@@ -48,6 +48,7 @@ services:
     image: qmcgaw/gluetun:latest
     env_file:
       - .env
+      - gluetun.env
     ports:
       - ${GLUETUN_HTTP_PORT:-8888}:8888/tcp         # HTTP proxy
       - ${GLUETUN_SHADOWSOCKS_PORT:-8388}:8388/tcp  # Shadowsocks

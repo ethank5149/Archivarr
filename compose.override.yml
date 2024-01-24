@@ -16,14 +16,6 @@ services:
     volumes:
       - "G:/roms://data"
 
-  gluetun:
-    environment:
-      - VPN_SERVICE_PROVIDER=surfshark
-      - VPN_TYPE=wireguard
-      - WIREGUARD_PUBLIC_KEY=''
-      - WIREGUARD_PRIVATE_KEY='kE9zR+BEuxRF7/z9axTk/6VS0LDndgV+ucwBG3HUV0w='
-      - WIREGUARD_ADDRESSES='10.14.0.2/16'
-
   lidarr:
     volumes:
       - "G:/music://data/music"
