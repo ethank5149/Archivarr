@@ -7,4 +7,5 @@
 /media/roms
 /media/tv
 
+compose.override.yml
 gluetun.env

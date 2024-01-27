@@ -10,38 +10,39 @@ version: "3.7"
 services:
   emulatorjs:
     volumes:
-      - "G:/roms://data"
+      - nas-roms:/data
+      # - "F:/roms://data"
 
   lidarr:
     volumes:
-      - "G:/music://data/portable-music"
       - nas-music:/data/nas-music
+      - "D:/music://data/music"
 
   radarr:
     volumes:
+      - nas-movies:/data/nas-movies
       - "E:/://data/portable-movies"
       - "F:/movies://data/movie-archive"
-      - nas-movies:/data/nas-movies
 
   readarr:
     volumes:
-      - "F:/books://data/portable-books"
       - nas-books:/data/nas-books
+      - "F:/books://data/portable-books"
 
   sonarr:
     volumes:
+      - nas-tv:/data/nas-tv
       - "I:/://data/portable-tv"
       - "F:/tv://data/tv-archive"
-      - nas-tv:/data/nas-tv
 
   tdarr:
     volumes:
+      - nas-tv:/data/nas-tv
+      - nas-movies:/data/nas-movies
       - "C:/Users/ethan/transcode_cache/://temp"
       - "I:/://data/tv"
       - "E:/://data/movies"
       - "F:/://data/archive"
-      - nas-tv:/data/nas-tv
-      - nas-movies:/data/nas-movies
 
 volumes:
   nas-books:
