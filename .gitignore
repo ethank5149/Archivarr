@@ -1,11 +1,2 @@
-/downloads/complete
-/downloads/incomplete
-
-/media/books
-/media/movies
-/media/music
-/media/roms
-/media/tv
-
 compose.override.yml
 gluetun.env
