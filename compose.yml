@@ -89,8 +89,8 @@ services:
       - ${LIDARR_PORT:-8686}:8686
     volumes:
       - lidarr:/config
-      - "./downloads/complete:/downloads"
-      - "./media/music:/data/local-music"
+      - ./downloads:/downloads
+      - ./media/music:/data/local-music
     restart: unless-stopped
     network_mode: bridge
 
@@ -106,27 +106,27 @@ services:
     restart: unless-stopped
     network_mode: bridge
 
-  # plex:  # Personal media library streaming
-  #   container_name: Plex
-  #   image: lscr.io/linuxserver/plex:latest
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - plex:/config
-  #     - ./media/tv:/tv
-  #     - ./media/movies:/movies
-  #     - ./media/music:/music
-  #   devices:
-  #     - /dev/dri:/dev/dri
-  #   # deploy:
-  #   #   resources:
-  #   #     reservations:
-  #   #       devices:
-  #   #       - driver: nvidia
-  #   #         count: all
-  #   #         capabilities: [gpu]
-  #   network_mode: host
-  #   restart: unless-stopped
+  plex:  # Personal media library streaming
+    container_name: Plex
+    image: lscr.io/linuxserver/plex:latest
+    env_file:
+      - .env
+    volumes:
+      - plex:/config
+      - ./media/tv:/tv
+      - ./media/movies:/movies
+      - ./media/music:/music
+    devices:
+      - /dev/dri:/dev/dri
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia  # For Nvidia GPUs
+            count: all
+            capabilities: [gpu]
+    network_mode: host
+    restart: unless-stopped
 
   portainer:  # Docker Management Dashboard
     container_name: Portainer
@@ -161,7 +161,7 @@ services:
       - ${RADARR_PORT:-7878}:7878
     volumes:
       - radarr:/config
-      - ./downloads/complete:/downloads
+      - ./downloads:/downloads
       - ./media/movies:/data/local-movies
     restart: unless-stopped
     network_mode: bridge
@@ -175,7 +175,7 @@ services:
       - ${READARR_PORT:-8787}:8787
     volumes:
       - readarr:/config
-      - ./downloads/complete:/downloads
+      - ./downloads:/downloads
       - ./media/books:/data/local-books
     restart: unless-stopped
     network_mode: bridge
@@ -189,7 +189,7 @@ services:
       - ${SONARR_PORT:-8989}:8989
     volumes:
       - sonarr:/config
-      - ./downloads/complete:/downloads
+      - ./downloads:/downloads
       - ./media/tv:/data/local-tv
     restart: unless-stopped
     network_mode: bridge
@@ -256,14 +256,14 @@ volumes:
   tdarr-logs:
 
 
-secrets:
-  username:
-    file: ./secrets/username.txt
-  password:
-    file: ./secrets/password.txt
-  wireguard-addresses:
-    file: ./secrets/wireguard-addresses.txt
-  wireguard-private-key:
-    file: ./secrets/wireguard-private-key.txt
-  discord-key:
-    file: ./secrets/discord-key.txt
+# secrets:
+#   username:
+#     file: ./secrets/username.txt
+#   password:
+#     file: ./secrets/password.txt
+#   wireguard-addresses:
+#     file: ./secrets/wireguard-addresses.txt
+#   wireguard-private-key:
+#     file: ./secrets/wireguard-private-key.txt
+#   discord-key:
+#     file: ./secrets/discord-key.txt
