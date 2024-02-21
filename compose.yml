@@ -90,7 +90,7 @@ services:
     volumes:
       - lidarr:/config
       - ./downloads:/downloads
-      - ./media/music:/data/local-music
+      - ./media/music:/data/music
     restart: unless-stopped
     network_mode: bridge
 
@@ -106,27 +106,27 @@ services:
     restart: unless-stopped
     network_mode: bridge
 
-  plex:  # Personal media library streaming
-    container_name: Plex
-    image: lscr.io/linuxserver/plex:latest
-    env_file:
-      - .env
-    volumes:
-      - plex:/config
-      - ./media/tv:/tv
-      - ./media/movies:/movies
-      - ./media/music:/music
-    devices:
-      - /dev/dri:/dev/dri
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia  # For Nvidia GPUs
-            count: all
-            capabilities: [gpu]
-    network_mode: host
-    restart: unless-stopped
+  # plex:  # Personal media library streaming
+  #   container_name: Plex
+  #   image: lscr.io/linuxserver/plex:latest
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - plex:/config
+  #     - ./media/tv:/tv
+  #     - ./media/movies:/movies
+  #     - ./media/music:/music
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #         - driver: nvidia  # For Nvidia GPUs
+  #           count: all
+  #           capabilities: [gpu]
+  #   network_mode: host
+  #   restart: unless-stopped
 
   portainer:  # Docker Management Dashboard
     container_name: Portainer
@@ -162,7 +162,7 @@ services:
     volumes:
       - radarr:/config
       - ./downloads:/downloads
-      - ./media/movies:/data/local-movies
+      - ./media/movies:/data/movies
     restart: unless-stopped
     network_mode: bridge
 
@@ -176,7 +176,7 @@ services:
     volumes:
       - readarr:/config
       - ./downloads:/downloads
-      - ./media/books:/data/local-books
+      - ./media/books:/data/books
     restart: unless-stopped
     network_mode: bridge
 
@@ -190,7 +190,7 @@ services:
     volumes:
       - sonarr:/config
       - ./downloads:/downloads
-      - ./media/tv:/data/local-tv
+      - ./media/tv:/data/tv
     restart: unless-stopped
     network_mode: bridge
 
